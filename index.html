@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizza Booking</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .pizza-form {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .topping-list {
+            list-style: none;
+            padding: 0;
+        }
+        .topping-list li {
+            margin-bottom: 10px;
+        }
+        .total-price {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Pizza Booking</h1>
+        <form class="pizza-form">
+            <h2>Choose Your Pizza</h2>
+            <label for="pizza-type">Select Pizza Type:</label>
+            <select id="pizza-type">
+                <option value="Margherita">Margherita</option>
+                <option value="Pepperoni">Pepperoni</option>
+                <option value="Vegetarian">Vegetarian</option>
+            </select>
+            <h2>Toppings</h2>
+            <ul class="topping-list">
+                <li><input type="checkbox" id="topping-cheese" value="Cheese"> Cheese ($1.50)</li>
+                <li><input type="checkbox" id="topping-mushrooms" value="Mushrooms"> Mushrooms ($1.00)</li>
+                <li><input type="checkbox" id="topping-peppers" value="Peppers"> Peppers ($0.75)</li>
+            </ul>
+            <label for="phone-no">Phone Number (16-digit card number):</label>
+            <input type="tel" id="phone-no" pattern="[0-9]{16}" required>
+            <label for="card-name">Card Name:</label>
+            <input type="text" id="card-name" required>
+            <label for="ccv">CCV:</label>
+            <input type="text" id="ccv" required>
+            <label for="expiry-date">Expiry Date:</label>
+            <input type="text" id="expiry-date" required>
+            <button type="submit">Place Order</button>
+        </form>
+        <div class="total-price">
+            Total Price (including tax): $<span id="total-price">0.00</span>
+        </div>
+        <p>Your order will be delivered in approximately <span id="eta">30 minutes</span>.</p>
+        <p>Order placed successfully!</p>
+    </div>
+    <script>
+        const pizzaTypeSelect = document.getElementById('pizza-type');
+        const toppings = document.querySelectorAll('input[type="checkbox"]');
+        const phoneNoInput = document.getElementById('phone-no');
+        const totalPriceSpan = document.getElementById('total-price');
+        const etaSpan = document.getElementById('eta');
+
+        // Calculate total price based on selected toppings
+        function calculateTotalPrice() {
+            let price = 0;
+            toppings.forEach(topping => {
+                if (topping.checked) {
+                    switch (topping.value) {
+                        case 'Cheese':
+                            price += 1.5;
+                            break;
+                        case 'Mushrooms':
+                            price += 1;
+                            break;
+                        case 'Peppers':
+                            price += 0.75;
+                            break;
+                    }
+                }
+            });
+            // Add delivery fee (you can adjust this value)
+            price += 2.5;
+            // Add tax (you can adjust this value)
+            price *= 1.1;
+            totalPriceSpan.textContent = price.toFixed(2);
+        }
+
+        // Update total price when toppings are changed
+        toppings.forEach(topping => {
+            topping.addEventListener('change', calculateTotalPrice);
+        });
+
+        // Generate random ETA
+        const randomEta = Math.floor(Math.random() * 30) + 15; // Between 15 and 45 minutes
+        etaSpan.textContent = `${randomEta} minutes`;
+    </script>
+</body>
+</html>
